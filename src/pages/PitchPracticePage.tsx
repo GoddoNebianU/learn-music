@@ -1,4 +1,4 @@
-import { Pause, Play } from 'lucide-react';
+import { Play, Check, X, ArrowLeft, Volume2 } from 'lucide-react';
 import { cn } from '../lib/cn';
 import { useEffect, useRef, useState } from 'react';
 import { emaStep } from '../lib/math';
@@ -6,7 +6,7 @@ import { playRandomKey } from '../lib/audio';
 import { delay } from '../lib/utils';
 import AccuracyForm from '../components/AccuracyForm';
 import type { PianoKey } from '../lib/piano';
-import FittingCurve from '../components/FittingCurve';
+import { Link } from 'react-router-dom';
 
 const CDEFGAB = "CDEFGAB";
 
@@ -16,8 +16,8 @@ export default function PitchPracticePage() {
   const [lastPitch, setLastPitch] = useState("");
   const [lastKey, setLastKey] = useState<null | PianoKey>(null);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [started, setStarted] = useState(false);
-  const startedRef = useRef(false);
+  const [playing, setPlaying] = useState(false);
+  const playingRef = useRef(false);
 
   useEffect(() => {
     ctxRef.current = new AudioContext();
@@ -27,9 +27,13 @@ export default function PitchPracticePage() {
     };
   }, [ctxRef]);
 
-  const onPlayClick = async () => {
+  const startRound = async () => {
     if (!ctxRef.current) return;
-    if (!startedRef.current) return;
+    if (playingRef.current) return;
+
+    playingRef.current = true;
+    setPlaying(true);
+    setShowAnswer(false);
 
     await playRandomKey(ctxRef.current, (key) => {
       setLastPitch(key.scientificName + " " + {
@@ -42,15 +46,22 @@ export default function PitchPracticePage() {
         "B": "Si"
       }[key.noteName]);
       setLastKey(key);
-      setShowAnswer(false);
     });
-    await delay(2000);
+
+    await delay(1500);
     setShowAnswer(true);
-    setStarted(false);
+    setPlaying(false);
+    playingRef.current = false;
   };
 
-  const calAccuracy = (bingo: boolean) => {
+  const stopRound = () => {
+    playingRef.current = false;
+    setPlaying(false);
+  };
+
+  const answerAndNext = async (bingo: boolean) => {
     if (!lastKey) return;
+    if (playingRef.current) return;
 
     const index = CDEFGAB.indexOf(lastKey.noteName);
 
@@ -59,92 +70,111 @@ export default function PitchPracticePage() {
     } else {
       setAccuracy(acc => acc.map((ac, i) => i === index ? emaStep(ac, bingo ? 100 : 0, 0.07) : ac));
     }
+
+    startRound();
   };
 
+  const hasNote = lastPitch.length > 0;
+
   return (
-    <>
-      <div className={cn(
-        "mx-auto p-8 w-fit my-8",
-        "shadow rounded",
-        "flex justify-center items-center flex-col",
-        "gap-4"
-      )}>
-        <h1 className={cn(
-          "text-4xl"
-        )}>建立音感</h1>
+    <div className="min-h-screen">
+      <header className="flex h-14 items-center border-b border-gray-200 px-4">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          返回
+        </Link>
+      </header>
 
-        <AccuracyForm accuracy={accuracy} />
-        <FittingCurve accuracy={accuracy} />
+      <main className="mx-auto max-w-2xl px-4 py-6">
+        <h1 className="text-2xl font-bold text-gray-800">建立音感</h1>
+        <p className="text-sm text-gray-500">提升你的音高辨识能力</p>
 
-        <button
-          className={cn(
-            "p-2 shadow rounded font-bold",
-            "flex flex-row items-center justify-center"
-          )}
-          onClick={() => {
-            if (!started) {
-              setStarted(true);
-              startedRef.current = true;
-              onPlayClick();
-            } else {
-              setStarted(false);
-              startedRef.current = false;
-            }
-          }}>
-          {started && <Pause /> || <Play />}
-          <span>{started && "停" || "听"}</span>
-        </button>
-
-        {lastPitch.length > 0 && <p className={cn(
-          ""
-        )}>当前：<button className={cn(
-          ""
-        )}
-          onClick={() => setShowAnswer(b => !b)}>
-            {
-              (showAnswer && lastKey !== null) && lastKey.scientificName || "点击查看"
-            }
-          </button></p>}
-
-        <div>
-          <button
-            className={cn(
-              "p-2 shadow rounded font-bold",
-              "flex flex-row items-center justify-center"
+        <div className="mt-6 flex flex-col items-center gap-5">
+          <div className="flex w-full items-center justify-center gap-3 text-sm h-8">
+            {hasNote && !playing ? (
+              <>
+                <span className="text-gray-500">当前：</span>
+                <button
+                  className={cn(
+                    "rounded-md bg-gray-100 px-4 py-1 font-semibold text-gray-900",
+                    "hover:bg-gray-200 transition-colors duration-250"
+                  )}
+                  onClick={() => setShowAnswer(b => !b)}>
+                  {(showAnswer && lastKey !== null) ? lastKey.scientificName : "点击查看"}
+                </button>
+              </>
+            ) : (
+              <span className="text-gray-400">{playing ? "听音中..." : "点击下方按钮开始"}</span>
             )}
-            onClick={() => {
-              calAccuracy(true);
-              if (!started) {
-                setStarted(true);
-                startedRef.current = true;
-                onPlayClick();
-              } else {
-                setStarted(false);
-                startedRef.current = false;
-              }
-            }}>
-            <span>听出来了</span>
-          </button>
-          <button
-            className={cn(
-              "p-2 shadow rounded font-bold",
-              "flex flex-row items-center justify-center"
-            )}
-            onClick={() => {
-              calAccuracy(false);
-              if (!started) {
-                setStarted(true);
-                startedRef.current = true;
-                onPlayClick();
-              } else {
-                setStarted(false);
-                startedRef.current = false;
-              }
-            }}>
-            <span>没听出来</span>
-          </button>
+          </div>
+
+          <AccuracyForm accuracy={accuracy} />
         </div>
-      </div>
-    </>
+
+        <div className="mt-8 flex flex-col items-center gap-5">
+          <button
+            className={cn(
+              "inline-flex items-center justify-center gap-2 rounded-md font-semibold",
+              "h-12 w-full px-6 text-base",
+              "bg-gray-800 text-white hover:bg-gray-900",
+              "transition-colors duration-250",
+              playing && "bg-gray-600"
+            )}
+            onClick={playing ? stopRound : startRound}
+          >
+            {playing ? (
+              <>
+                <Volume2 className="h-5 w-5 animate-pulse" />
+                <span>播放中...</span>
+              </>
+            ) : hasNote ? (
+              <>
+                <Play className="h-5 w-5" />
+                <span>下一题</span>
+              </>
+            ) : (
+              <>
+                <Play className="h-5 w-5" />
+                <span>开始</span>
+              </>
+            )}
+          </button>
+
+          <div className="flex w-full gap-3">
+            <button
+              disabled={!hasNote || playing}
+              className={cn(
+                "inline-flex flex-1 items-center justify-center gap-2 rounded-md font-semibold",
+                "h-10 px-4 text-base",
+                "bg-gray-800 text-white hover:bg-gray-900",
+                "transition-colors duration-250",
+                (!hasNote || playing) && "pointer-events-none opacity-40"
+              )}
+              onClick={() => answerAndNext(true)}
+            >
+              <Check className="h-4 w-4" />
+              <span>听出来了</span>
+            </button>
+            <button
+              disabled={!hasNote || playing}
+              className={cn(
+                "inline-flex flex-1 items-center justify-center gap-2 rounded-md font-semibold",
+                "h-10 px-4 text-base",
+                "border border-gray-300 text-gray-700",
+                "hover:bg-gray-50 transition-colors duration-250",
+                (!hasNote || playing) && "pointer-events-none opacity-40"
+              )}
+              onClick={() => answerAndNext(false)}
+            >
+              <X className="h-4 w-4" />
+              <span>没听出来</span>
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
   );
 }
