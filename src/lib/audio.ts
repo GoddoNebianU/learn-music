@@ -119,21 +119,52 @@ const PRACTICE_RANGE = (([start, end]: [string, string]) => {
 const ROOT = "C5";
 
 export const playRandomKey = async (ctx: AudioContext, callback: (key: PianoKey) => void) => {
-    const getOsc = () => {
-        const osc = ctx.createOscillator();
-        osc.connect(ctx.destination);
-        osc.type = "sine";
-        osc.onended = osc.disconnect;
-        return osc;
-    };
     const findKey = (sn: string) => PIANO_KEYS.filter(k => k.scientificName === sn)[0];
 
     const playKey = async (sn: string, ms: number) => {
-        const osc = getOsc();
-        osc.frequency.value = findKey(sn).frequency;
-        osc.start();
+        const freq = findKey(sn).frequency;
+        const now = ctx.currentTime;
+        const duration = ms / 1000;
+
+        const master = ctx.createGain();
+        master.connect(ctx.destination);
+
+        const attack = 0.01;
+        const decay = 0.15;
+        const sustainLevel = 0.3;
+        const release = 0.1;
+
+        master.gain.setValueAtTime(0, now);
+        master.gain.linearRampToValueAtTime(0.35, now + attack);
+        master.gain.linearRampToValueAtTime(sustainLevel * 0.35, now + attack + decay);
+        master.gain.setValueAtTime(sustainLevel * 0.35, now + duration - release);
+        master.gain.linearRampToValueAtTime(0.001, now + duration);
+
+        // Harmonics: [frequency multiplier, amplitude, waveform]
+        const harmonics: Array<{ ratio: number; amp: number; type: OscillatorType }> = [
+            { ratio: 1, amp: 1, type: "triangle" },
+            { ratio: 2, amp: 0.5, type: "sine" },
+            { ratio: 3, amp: 0.15, type: "sine" },
+            { ratio: 4, amp: 0.06, type: "sine" },
+        ];
+
+        const oscillators = harmonics.map(({ ratio, amp, type }) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = type;
+            osc.frequency.value = freq * ratio;
+            gain.gain.value = amp;
+            osc.connect(gain);
+            gain.connect(master);
+            osc.start(now);
+            osc.stop(now + duration);
+            return osc;
+        });
+
         await delay(ms);
-        osc.stop();
+
+        oscillators.forEach(osc => { try { osc.stop(); osc.disconnect(); } catch {} });
+        try { master.disconnect(); } catch {}
     };
 
     const index = Math.floor(Math.random() * PRACTICE_RANGE.length);
