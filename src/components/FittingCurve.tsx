@@ -220,9 +220,11 @@ export default function FittingCurve({ accuracy }: FittingCurveProps) {
     }, [accuracy]);
 
     return (
-        <div className="w-full max-w-2xl">
-            <div className="w-full h-80">
-                <canvas ref={chartRef}></canvas>
+        <div className="w-full">
+            <div className="w-full rounded-lg border-2 border-gray-200 p-4 shadow-sm">
+                <div className="w-full h-80">
+                    <canvas ref={chartRef}></canvas>
+                </div>
             </div>
         </div>
     );

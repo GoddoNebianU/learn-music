@@ -1,5 +1,4 @@
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../lib/config";
-import { cn } from "../lib/cn";
 
 interface MCanvasProps {
     canvasRef: React.RefObject<HTMLCanvasElement | null>;
@@ -10,11 +9,12 @@ export default function MyCanvas(
     { canvasRef, transparent }: MCanvasProps
 ) {
     return (
-        <div className="border flex flex-col absolute left-1/2 -translate-x-1/2">
+        <div className="border flex flex-col absolute left-0 w-full">
             <canvas
                 width={CANVAS_WIDTH}
                 height={CANVAS_HEIGHT}
-                className={cn(transparent && "opacity-50")}
+                style={{ width: "100%" }}
+                className={transparent ? "opacity-50" : undefined}
                 ref={canvasRef}>Your browser does not support canvas.</canvas>
         </div>
     );
