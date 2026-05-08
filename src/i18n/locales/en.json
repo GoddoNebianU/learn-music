@@ -1,0 +1,45 @@
+{
+  "home": {
+    "title": "Music Learning Tools",
+    "pitchEcho": "Pitch Echo",
+    "pitchEchoDesc": "Real-time mic pitch detection",
+    "pitchPractice": "Pitch Practice",
+    "pitchPracticeDesc": "Ear training"
+  },
+  "common": {
+    "back": "Back",
+    "start": "Start",
+    "accuracy": "Accuracy"
+  },
+  "pitchEcho": {
+    "title": "Pitch Echo",
+    "desc": "Real-time mic pitch detection",
+    "landscapeHint": "Rotate your device to landscape for a better experience",
+    "dbThreshold": "dB threshold: {{value}}dB"
+  },
+  "pitchPractice": {
+    "title": "Build Your Ear",
+    "desc": "Improve your pitch recognition",
+    "current": "Current:",
+    "clickToReveal": "Click to reveal",
+    "listening": "Listening...",
+    "clickToStart": "Click the button below to start",
+    "playing": "Playing...",
+    "nextQuestion": "Next",
+    "gotIt": "Got it",
+    "missedIt": "Missed it",
+    "noteNames": {
+      "C": "Do",
+      "D": "Re",
+      "E": "Mi",
+      "F": "Fa",
+      "G": "Sol",
+      "A": "La",
+      "B": "Si"
+    }
+  },
+  "langSwitch": {
+    "en": "EN",
+    "zh": "中文"
+  }
+}

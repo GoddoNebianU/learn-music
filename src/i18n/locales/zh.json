@@ -1,0 +1,45 @@
+{
+  "home": {
+    "title": "音乐学习工具集",
+    "pitchEcho": "Pitch Echo",
+    "pitchEchoDesc": "麦克风音高检测",
+    "pitchPractice": "Pitch Practice",
+    "pitchPracticeDesc": "音感训练"
+  },
+  "common": {
+    "back": "返回",
+    "start": "开始",
+    "accuracy": "正确率"
+  },
+  "pitchEcho": {
+    "title": "Pitch Echo",
+    "desc": "麦克风音高检测",
+    "landscapeHint": "建议横屏使用以获得更好体验",
+    "dbThreshold": "分贝阈值：{{value}}dB"
+  },
+  "pitchPractice": {
+    "title": "建立音感",
+    "desc": "提升你的音高辨识能力",
+    "current": "当前：",
+    "clickToReveal": "点击查看",
+    "listening": "听音中...",
+    "clickToStart": "点击下方按钮开始",
+    "playing": "播放中...",
+    "nextQuestion": "下一题",
+    "gotIt": "听出来了",
+    "missedIt": "没听出来",
+    "noteNames": {
+      "C": "Do",
+      "D": "Re",
+      "E": "Mi",
+      "F": "Fa",
+      "G": "Sol",
+      "A": "La",
+      "B": "Si"
+    }
+  },
+  "langSwitch": {
+    "en": "EN",
+    "zh": "中文"
+  }
+}

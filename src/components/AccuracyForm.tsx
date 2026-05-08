@@ -1,4 +1,5 @@
 import { cn } from "../lib/cn";
+import { useTranslation } from "react-i18next";
 
 interface AccuracyFormProps {
     accuracy: number[];
@@ -9,9 +10,10 @@ const CDEFGAB = "CDEFGAB";
 export default function AccuracyForm({
     accuracy
 }: AccuracyFormProps) {
+    const { t } = useTranslation();
     return (
         <div className="w-full">
-            <h3 className="mb-2 text-sm font-medium text-gray-700">正确率</h3>
+            <h3 className="mb-2 text-sm font-medium text-gray-700">{t('common.accuracy')}</h3>
             <div className="grid grid-cols-7 gap-1.5">
                 {accuracy.map((acc, index) => {
                     const note = CDEFGAB[index];

@@ -9,8 +9,11 @@ import { BLACK_KEY_COUNT, DEFAULT_SONG_URL, ENABLE_AUDIO, START_Y_M, WHITE_KEY_C
 import { useGlobalStore } from "../globalStore";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { LanguageSwitcher } from "../components/LanguageSwitcher";
 
 export default function PitchEchoPage() {
+    const { t } = useTranslation();
     const mCanvasRef = useRef<HTMLCanvasElement>(null);
     const aCanvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -89,29 +92,30 @@ export default function PitchEchoPage() {
     useEffect(() => {
         const check = () => {
             if (window.innerWidth < 768 && window.innerWidth < window.innerHeight) {
-                toast("建议横屏使用以获得更好体验", { duration: 5000, id: "landscape-hint" });
+                toast(t('pitchEcho.landscapeHint'), { duration: 5000, id: "landscape-hint" });
             }
         };
         check();
         window.addEventListener("resize", check);
         return () => window.removeEventListener("resize", check);
-    }, []);
+    }, [t]);
 
     return (
         <div className="min-h-screen">
-            <header className="flex h-14 items-center border-b border-gray-200 px-4">
+            <header className="flex h-14 items-center justify-between border-b border-gray-200 px-4">
                 <Link
                     to="/"
                     className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors"
                 >
                     <ArrowLeft className="h-4 w-4" />
-                    返回
+                    {t('common.back')}
                 </Link>
+                <LanguageSwitcher />
             </header>
 
             <main className="mx-auto max-w-3xl px-4 py-6">
-                <h1 className="text-2xl font-bold text-gray-800">Pitch Echo</h1>
-                <p className="text-sm text-gray-500">麦克风音高检测</p>
+                <h1 className="text-2xl font-bold text-gray-800">{t('pitchEcho.title')}</h1>
+                <p className="text-sm text-gray-500">{t('pitchEcho.desc')}</p>
 
                 <div className="mt-6 flex flex-col items-center gap-4">
                     {!running && (
@@ -123,12 +127,12 @@ export default function PitchEchoPage() {
                                 setRunning(true);
                             }}
                         >
-                            开始
+                            {t('common.start')}
                         </button>
                     )}
 
                     <div className="flex w-full items-center gap-3 text-sm">
-                        <span className="shrink-0 text-gray-500">分贝阈值：{dbThreshold}dB</span>
+                        <span className="shrink-0 text-gray-500">{t('pitchEcho.dbThreshold', { value: dbThreshold })}</span>
                         <input
                             type="range"
                             min={1}

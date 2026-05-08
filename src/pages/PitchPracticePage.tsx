@@ -7,10 +7,13 @@ import { delay } from '../lib/utils';
 import AccuracyForm from '../components/AccuracyForm';
 import type { PianoKey } from '../lib/piano';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from '../components/LanguageSwitcher';
 
 const CDEFGAB = "CDEFGAB";
 
 export default function PitchPracticePage() {
+  const { t } = useTranslation();
   const ctxRef = useRef<null | AudioContext>(null);
   const [accuracy, setAccuracy] = useState(Array.from({ length: 7 }).fill(-1) as number[]);
   const [lastPitch, setLastPitch] = useState("");
@@ -37,13 +40,13 @@ export default function PitchPracticePage() {
 
     await playRandomKey(ctxRef.current, (key) => {
       setLastPitch(key.scientificName + " " + {
-        "C": "Do",
-        "D": "Re",
-        "E": "Mi",
-        "F": "Fa",
-        "G": "Sol",
-        "A": "La",
-        "B": "Si"
+        "C": t('pitchPractice.noteNames.C'),
+        "D": t('pitchPractice.noteNames.D'),
+        "E": t('pitchPractice.noteNames.E'),
+        "F": t('pitchPractice.noteNames.F'),
+        "G": t('pitchPractice.noteNames.G'),
+        "A": t('pitchPractice.noteNames.A'),
+        "B": t('pitchPractice.noteNames.B')
       }[key.noteName]);
       setLastKey(key);
     });
@@ -78,36 +81,37 @@ export default function PitchPracticePage() {
 
   return (
     <div className="min-h-screen">
-      <header className="flex h-14 items-center border-b border-gray-200 px-4">
+      <header className="flex h-14 items-center justify-between border-b border-gray-200 px-4">
         <Link
           to="/"
           className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
-          返回
+          {t('common.back')}
         </Link>
+        <LanguageSwitcher />
       </header>
 
       <main className="mx-auto max-w-2xl px-4 py-6">
-        <h1 className="text-2xl font-bold text-gray-800">建立音感</h1>
-        <p className="text-sm text-gray-500">提升你的音高辨识能力</p>
+        <h1 className="text-2xl font-bold text-gray-800">{t('pitchPractice.title')}</h1>
+        <p className="text-sm text-gray-500">{t('pitchPractice.desc')}</p>
 
         <div className="mt-6 flex flex-col items-center gap-5">
           <div className="flex w-full items-center justify-center gap-3 text-sm h-8">
             {hasNote && !playing ? (
               <>
-                <span className="text-gray-500">当前：</span>
+                <span className="text-gray-500">{t('pitchPractice.current')}</span>
                 <button
                   className={cn(
                     "rounded-md bg-gray-100 px-4 py-1 font-semibold text-gray-900",
                     "hover:bg-gray-200 transition-colors duration-250"
                   )}
                   onClick={() => setShowAnswer(b => !b)}>
-                  {(showAnswer && lastKey !== null) ? lastKey.scientificName : "点击查看"}
+                  {(showAnswer && lastKey !== null) ? lastKey.scientificName : t('pitchPractice.clickToReveal')}
                 </button>
               </>
             ) : (
-              <span className="text-gray-400">{playing ? "听音中..." : "点击下方按钮开始"}</span>
+              <span className="text-gray-400">{playing ? t('pitchPractice.listening') : t('pitchPractice.clickToStart')}</span>
             )}
           </div>
 
@@ -128,17 +132,17 @@ export default function PitchPracticePage() {
             {playing ? (
               <>
                 <Volume2 className="h-5 w-5 animate-pulse" />
-                <span>播放中...</span>
+                <span>{t('pitchPractice.playing')}</span>
               </>
             ) : hasNote ? (
               <>
                 <Play className="h-5 w-5" />
-                <span>下一题</span>
+                <span>{t('pitchPractice.nextQuestion')}</span>
               </>
             ) : (
               <>
                 <Play className="h-5 w-5" />
-                <span>开始</span>
+                <span>{t('common.start')}</span>
               </>
             )}
           </button>
@@ -156,7 +160,7 @@ export default function PitchPracticePage() {
               onClick={() => answerAndNext(true)}
             >
               <Check className="h-4 w-4" />
-              <span>听出来了</span>
+              <span>{t('pitchPractice.gotIt')}</span>
             </button>
             <button
               disabled={!hasNote || playing}
@@ -170,7 +174,7 @@ export default function PitchPracticePage() {
               onClick={() => answerAndNext(false)}
             >
               <X className="h-4 w-4" />
-              <span>没听出来</span>
+              <span>{t('pitchPractice.missedIt')}</span>
             </button>
           </div>
         </div>
