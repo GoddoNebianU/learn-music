@@ -1,10 +1,12 @@
 {
   "home": {
     "title": "音乐学习工具集",
-    "pitchEcho": "Pitch Echo",
+    "pitchEcho": "音高回声",
     "pitchEchoDesc": "麦克风音高检测",
-    "pitchPractice": "Pitch Practice",
-    "pitchPracticeDesc": "音感训练"
+    "pitchPractice": "听音练习",
+    "pitchPracticeDesc": "音感训练",
+    "recorder": "竖笛指法",
+    "recorderDesc": "竖笛指法查询"
   },
   "common": {
     "back": "返回",
@@ -41,5 +43,20 @@
   "langSwitch": {
     "en": "EN",
     "zh": "中文"
+  },
+  "recorder": {
+    "title": "竖笛指法",
+    "desc": "竖笛指法查询",
+    "key": "调号",
+    "solfege": "唱名",
+    "presets": "预设",
+    "majorScale": "大调",
+    "minorScale": "自然小调",
+    "pentatonic": "五声音阶",
+    "clear": "清除",
+    "backspace": "退格",
+    "noNotes": "点击上方唱名添加",
+    "play": "试听",
+    "stop": "停止"
   }
 }

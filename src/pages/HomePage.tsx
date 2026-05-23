@@ -41,6 +41,17 @@ export default function HomePage() {
               <span className="text-lg font-bold text-gray-800">{t('home.pitchPractice')}</span>
               <span className="text-sm text-gray-500">{t('home.pitchPracticeDesc')}</span>
             </Link>
+            <Link
+              to="/recorder"
+              className={cn(
+                "rounded-md border border-gray-200 p-6",
+                "hover:bg-gray-50 transition-colors",
+                "flex flex-col gap-1"
+              )}
+            >
+              <span className="text-lg font-bold text-gray-800">{t('home.recorder')}</span>
+              <span className="text-sm text-gray-500">{t('home.recorderDesc')}</span>
+            </Link>
           </div>
         </div>
       </main>

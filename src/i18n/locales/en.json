@@ -4,7 +4,9 @@
     "pitchEcho": "Pitch Echo",
     "pitchEchoDesc": "Real-time mic pitch detection",
     "pitchPractice": "Pitch Practice",
-    "pitchPracticeDesc": "Ear training"
+    "pitchPracticeDesc": "Ear training",
+    "recorder": "Recorder Fingering",
+    "recorderDesc": "Recorder fingering chart lookup"
   },
   "common": {
     "back": "Back",
@@ -41,5 +43,20 @@
   "langSwitch": {
     "en": "EN",
     "zh": "中文"
+  },
+  "recorder": {
+    "title": "Recorder Fingering",
+    "desc": "Recorder fingering chart lookup",
+    "key": "Key",
+    "solfege": "Solfege",
+    "presets": "Presets",
+    "majorScale": "Major",
+    "minorScale": "Natural Minor",
+    "pentatonic": "Pentatonic",
+    "clear": "Clear",
+    "backspace": "Back",
+    "noNotes": "Tap notes above to add",
+    "play": "Play",
+    "stop": "Stop"
   }
 }
