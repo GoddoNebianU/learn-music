@@ -13,7 +13,7 @@ import {
 } from '../lib/recorderData';
 
 const MAJOR_SCALE = ['1', '2', '3', '4', '5', '6', '7'];
-const NATURAL_MINOR = ['1', '2', 's3', '4', '5', 's6', 's7'];
+const NATURAL_MINOR = ['1', '2', 's2', '4', '5', 's5', 's6'];
 const PENTATONIC = ['1', '2', '3', '5', '6'];
 
 const NOTE_DURATION_MS = 450;
