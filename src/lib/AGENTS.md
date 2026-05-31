@@ -12,6 +12,7 @@ All non-UI logic: audio synthesis, pitch detection, piano key mapping, canvas dr
 | `piano.ts` | `PIANO_KEYS` array (88 keys A0–C8), `PianoKey` interface, `getKeyByFreq` (binary search), `getFreqOfKey` |
 | `canvas.ts` | `mCanvasDraw` (mic falling blocks), `aCanvasDraw` (audio file falling blocks), key index helpers |
 | `config.ts` | All magic numbers — key range (C2–B6), canvas dims (1440×380), block sizes, FPS, thresholds |
+| `recorderData.ts` | Recorder fingering: `FN_INDEXES` (27 notes), `KEY_NAMES` (12 keys), `KEY_SOLFEGE` (12×27 mapping), sprite layout constants, `getNoteIndexForKey`, `getSolfegeForKey`, `getFrequencyForNoteIndex` |
 | `useMicPitch.ts` | Hook — mic input → real-time pitch via `pitchy` library (RAF loop, dB threshold gating) |
 | `useAudioFilePitch.ts` | Hook — audio file URL → offline pitch extraction via `pitchy` |
 | `math.ts` | `emaStep` — exponential moving average (accuracy smoothing, α=0.07) |
@@ -29,6 +30,7 @@ audio.ts  ← PitchPracticePage (playRandomKey)
 canvas.ts ← PitchEchoPage (mCanvasDraw, aCanvasDraw)
 useMicPitch.ts    ← PitchEchoPage
 useAudioFilePitch ← PitchEchoPage
+recorderData.ts   ← RecorderFingering (sprite constants), RecorderPage (note/solfege lookup, frequency)
 ```
 
 ## CONVENTIONS
@@ -38,6 +40,7 @@ useAudioFilePitch ← PitchEchoPage
 - `findNearestKey` returns `0` for silence/no-match (not null) — key index 0 is unused sentinel
 - Block queue pattern: push new blocks, increment y each frame, splice when off-screen
 - `cn.ts` re-exports `clsx` + `tailwind-merge` — use this instead of raw `clsx` or template literals
+- `recorderData.ts` sprite layout constants (`COL_X_OFFSET`, `COL_WIDTH`, `DIAGRAM_Y` etc.) map 1:1 to `public/recorder/zhifa.png` pixel positions — do not change independently
 
 ## NOTES
 

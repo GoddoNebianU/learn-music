@@ -1,7 +1,7 @@
 # PROJECT KNOWLEDGE BASE
 
-**Generated:** 2026-05-08T16:30:00+08:00
-**Commit:** 1de2155
+**Generated:** 2026-05-23T12:00:00+08:00
+**Commit:** 97bb9a5
 **Branch:** main
 
 ## OVERVIEW
@@ -25,12 +25,14 @@ src/
 │   ├── Piano.tsx          # Responsive piano keyboard (flex layout)
 │   ├── MyCanvas.tsx       # Canvas wrapper (fixed resolution, CSS scales display)
 │   ├── AccuracyForm.tsx   # 7-column accuracy grid with progress bars
+│   ├── RecorderFingering.tsx # CSS sprite cropper for recorder fingering chart
 │   ├── LanguageSwitcher.tsx # EN / 中文 toggle (every page header)
 │   └── FittingCurve.tsx   # UNUSED — dead code
 └── pages/
     ├── HomePage.tsx       # / — landing page with tool links
     ├── PitchEchoPage.tsx  # /pitch-echo — mic pitch detection + falling notes
-    └── PitchPracticePage.tsx # /pitch-practice — ear training quiz
+    ├── PitchPracticePage.tsx # /pitch-practice — ear training quiz
+    └── RecorderPage.tsx   # /recorder — recorder fingering chart + audio playback
 ```
 
 ## WHERE TO LOOK
@@ -44,7 +46,9 @@ src/
 | Change global state | `src/globalStore.ts` | Zustand — currently only `dbThreshold` |
 | Change piano visualization | `src/components/Piano.tsx` | Responsive flex layout, aligns with canvas |
 | Change accuracy display | `src/components/AccuracyForm.tsx` | 7-column grid with progress bars |
-| Add/modify translations | `src/i18n/locales/{en,zh}.json` | Key structure: `home.*`, `common.*`, `pitchEcho.*`, `pitchPractice.*` |
+| Change recorder fingering display | `src/components/RecorderFingering.tsx` | CSS sprite cropping from `public/recorder/zhifa.png` |
+| Change recorder note/key data | `src/lib/recorderData.ts` | Note indexes, solfege mappings, sprite constants |
+| Add/modify translations | `src/i18n/locales/{en,zh}.json` | Key structure: `home.*`, `common.*`, `pitchEcho.*`, `pitchPractice.*`, `recorder.*` |
 | Change language detection | `src/i18n/index.ts` | Order: localStorage key `language` → navigator |
 | Change language switcher | `src/components/LanguageSwitcher.tsx` | EN/中文 buttons in every page header |
 
